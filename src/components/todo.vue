@@ -11,14 +11,13 @@
         </v-btn>
       </template>
       <v-card>
-        <v-card-title>
-          <span class="headline">Add Task</span>
-        </v-card-title>
         <v-card-text>
           <v-container>
-            <v-text-field label="Enter todo" v-model="form.task"></v-text-field>
-            <v-text-field label="Date" type="date" v-model="form.date"></v-text-field>
-            <v-text-field label="Time" type="time" value="12:00:00" v-model="form.time"></v-text-field>
+            <v-text-field label="Enter Task" v-model="form.task" ></v-text-field>
+            <div class="d-flex justify-space-between">
+              <v-date-picker v-model="form.date" width="220" color="primary"></v-date-picker>
+              <v-time-picker v-model="form.time" width="220"></v-time-picker>
+            </div>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -32,15 +31,15 @@
     </v-dialog>
     <v-card class="mx-8">
       <v-card-title class="blue-grey lighten-1 white--text">Task To Do :</v-card-title>
-      <div class="d-flex">
+      <div class="d-flex flex-wrap">
         <div class="py-5" v-for="(task,index) in tasks" :key="index">
           <v-card class="my-5 mx-5">
             <v-list-item class="d-flex justify-space-between font-weight-bold title">
-              {{ task.task }}
-              <v-checkbox class="mt-5 ml-3" v-model="task.check" @change="onclick"></v-checkbox>
-            </v-list-item>
-            <v-list-item v-if="task.check">
-              <p class="red--text">Completed</p>
+              <p class="red--text" v-if="task.check">
+                <del>{{ task.task }}</del>
+              </p>
+              <p v-if="!task.check">{{ task.task }}</p>
+              <v-checkbox class="mt-2 ml-3" v-model="task.check"></v-checkbox>
             </v-list-item>
             <v-list-item>
               <v-list-item-content>Date : {{task.date}}</v-list-item-content>
@@ -50,7 +49,7 @@
             </v-list-item>
             <v-list-item class="d-flex justify-space-between">
               <div>
-                <a class="float-left" @click="edit(task,index)">Edit</a>
+                <a class="float-left" @click="edit(index)">Edit</a>
               </div>
               <div>
                 <a class="float-left" @click="del(index)">Delete</a>
@@ -115,17 +114,17 @@ export default {
     del(index) {
       this.$delete(this.tasks, index);
     },
-    edit(task, index) {
+    edit(index) {
       this.dialog = true;
-      this.form.task = task.task;
-      this.form.date = task.date;
-      this.form.time = task.time;
-      this.form.check = task.check;
+      this.form.task = this.tasks[index].task;
+      this.form.date = this.tasks[index].date;
+      this.form.time = this.tasks[index].time;
+      this.form.check = this.tasks[index].check;
       this.editIndex = true;
       this.indexval = index;
     },
     clear() {
-      this.form = { task: "", date: "", time: "", check: false };
+      this.form = { task: "", date: "", time: "12:00", check: false };
       this.error = "";
     }
   }
