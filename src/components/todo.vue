@@ -13,10 +13,10 @@
       <v-card>
         <v-card-text>
           <v-container>
-            <v-text-field label="Enter Task" v-model="form.task" ></v-text-field>
+            <v-text-field label="Enter Task Here..." v-model="form.task"></v-text-field>
             <div class="d-flex justify-space-between">
-              <v-date-picker v-model="form.date" width="220" color="primary"></v-date-picker>
-              <v-time-picker v-model="form.time" width="220"></v-time-picker>
+              <v-date-picker v-model="form.date" width="220"></v-date-picker>
+              <v-time-picker width="220" v-model="form.time" v-if="dialog"></v-time-picker>
             </div>
           </v-container>
         </v-card-text>
@@ -61,12 +61,14 @@
     </v-card>
   </div>
 </template>
+
 <script>
 export default {
   name: "todo",
   data: () => {
     return {
       dialog: false,
+      picker: null,
       form: { task: "", date: "", time: "", check: false },
       val: {},
       tasks: [],
@@ -124,7 +126,7 @@ export default {
       this.indexval = index;
     },
     clear() {
-      this.form = { task: "", date: "", time: "12:00", check: false };
+      this.form = { task: "", date: "", time: "", check: false };
       this.error = "";
     }
   }
